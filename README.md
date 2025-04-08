@@ -7,7 +7,6 @@ Geolize is a geolocation service that provides IP lookup and modification capabi
 - IP address lookup with detailed geolocation information
 - Support for updating geolocation data
 - Integration with gRPC and HTTP servers
-- CORS support for cross-origin requests
 
 ## Installation
 
@@ -19,7 +18,7 @@ Geolize is a geolocation service that provides IP lookup and modification capabi
 
 2. Setup the environment:
     
-Make sure you have installed the Docker and Docker Compose.
+   Make sure you have installed the Docker and Docker Compose.
     
     ```bash
     make bootstrap
@@ -42,13 +41,13 @@ Make sure you have installed the Docker and Docker Compose.
     ```
 ## When I need to update the database to the latest version?
 
-1. You will need to stop the service first:
+1. You will need to stop the service first
 
 2. Mount the new GeoLite2 database file in the `data/db` directory.
 
 3. Set Geolize DB to dev.ini file with the name of the new database file.
 
-For example: If database file name is `GeoLite2-City.mmdb`, then you need to update the `dev.ini` file with the following:
+   For example: If database file name is `GeoLite2-City.mmdb`, then you need to update the `dev.ini` file with the following:
     
     ```ini
     [geolize]
@@ -63,4 +62,4 @@ For example: If database file name is `GeoLite2-City.mmdb`, then you need to upd
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for more information.
+MIT
