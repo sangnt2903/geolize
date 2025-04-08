@@ -1,0 +1,139 @@
+syntax = "proto3";
+package document_pb;
+
+import "includes/openapiv2/options/annotation.proto";
+import "includes/google/api/annotation.proto";
+
+option go_package = "geolize/geolize_pb";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Geolize API";
+    version: "1.0";
+    contact: {
+      name: "SANGO";
+      email: "sangnguyen.itp@gmail.com";
+    };
+    license: {
+      name: "MIT";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
+message PingRequest {}
+message PingResponse {}
+
+message Continent  {
+  string code = 1;
+  map<string,string> names = 2;
+}
+
+message Country {
+  string iso_code = 1;
+  map<string,string> names = 2;
+  bool is_in_european_union = 3;
+}
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+  uint32 accuracy_radius = 3;
+  string time_zone = 4;
+}
+
+message Subdivision {
+  string iso_code = 1;
+  map<string,string> names = 2;
+}
+
+message Postal {
+  string code = 1;
+}
+
+message City {
+  map<string,string> names = 1;
+}
+
+message RepresentedCountry {
+  string iso_code = 1;
+  map<string,string> names = 2;
+  string type = 3;
+  bool is_in_european_union = 4;
+}
+
+message RegisteredCountry {
+  string iso_code = 1;
+  map<string,string> names = 2;
+  bool is_in_european_union = 3;
+}
+
+message Traits {
+  bool is_anonymous_proxy = 1;
+  bool is_anycast = 2;
+  bool is_satellite_provider = 3;
+}
+
+message IPInfo {
+  string ip = 1;
+  string db_version = 2;
+  Continent continent = 3;
+  Country country = 4;
+  Location location = 5;
+  repeated Subdivision subdivisions = 6;
+  RepresentedCountry represented_country = 7;
+  RegisteredCountry registered_country = 8;
+  Traits traits = 9;
+  Postal postal = 10;
+  City city = 11;
+}
+
+message LookupIPRequest  {
+  repeated string ips = 1;
+}
+
+message LookupIPResponse {
+  repeated IPInfo data = 1;
+}
+
+message ModifyIPRequest {
+  string ip = 1;
+  Continent continent = 2;
+  Country country = 3;
+  Location location = 4;
+  repeated Subdivision subdivisions = 5;
+  RepresentedCountry represented_country = 6;
+  RegisteredCountry registered_country = 7;
+  Traits traits = 8;
+  Postal postal = 9;
+  City city = 10;
+}
+
+message ModifyIPResponse {}
+
+service Geolize {
+  rpc Ping(PingRequest) returns (PingResponse) {
+    option (google.api.http) = {
+      get: "/ping"
+    };
+  }
+
+  rpc LookupIP(LookupIPRequest) returns (LookupIPResponse) {
+    option (google.api.http) = {
+      get: "/v1/geoip/lookup-ip"
+    };
+  }
+
+  rpc ModifyIP(ModifyIPRequest) returns (ModifyIPResponse) {
+    option (google.api.http) = {
+      post: "/v1/geoip/modify-ip"
+      body: "*"
+    };
+  }
+}
+
+
+

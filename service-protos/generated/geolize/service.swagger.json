@@ -1,0 +1,383 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Geolize API",
+    "version": "1.0",
+    "contact": {
+      "name": "SANGO",
+      "email": "sangnguyen.itp@gmail.com"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Geolize"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "operationId": "Geolize_Ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/document_pbPingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Geolize"
+        ]
+      }
+    },
+    "/v1/geoip/lookup-ip": {
+      "get": {
+        "operationId": "Geolize_LookupIP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/document_pbLookupIPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ips",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "Geolize"
+        ]
+      }
+    },
+    "/v1/geoip/modify-ip": {
+      "post": {
+        "operationId": "Geolize_ModifyIP",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/document_pbModifyIPResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/document_pbModifyIPRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Geolize"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "document_pbCity": {
+      "type": "object",
+      "properties": {
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "document_pbContinent": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "document_pbCountry": {
+      "type": "object",
+      "properties": {
+        "isoCode": {
+          "type": "string"
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "isInEuropeanUnion": {
+          "type": "boolean"
+        }
+      }
+    },
+    "document_pbIPInfo": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string"
+        },
+        "dbVersion": {
+          "type": "string"
+        },
+        "continent": {
+          "$ref": "#/definitions/document_pbContinent"
+        },
+        "country": {
+          "$ref": "#/definitions/document_pbCountry"
+        },
+        "location": {
+          "$ref": "#/definitions/document_pbLocation"
+        },
+        "subdivisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/document_pbSubdivision"
+          }
+        },
+        "representedCountry": {
+          "$ref": "#/definitions/document_pbRepresentedCountry"
+        },
+        "registeredCountry": {
+          "$ref": "#/definitions/document_pbRegisteredCountry"
+        },
+        "traits": {
+          "$ref": "#/definitions/document_pbTraits"
+        },
+        "postal": {
+          "$ref": "#/definitions/document_pbPostal"
+        },
+        "city": {
+          "$ref": "#/definitions/document_pbCity"
+        }
+      }
+    },
+    "document_pbLocation": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double"
+        },
+        "accuracyRadius": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "timeZone": {
+          "type": "string"
+        }
+      }
+    },
+    "document_pbLookupIPResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/document_pbIPInfo"
+          }
+        }
+      }
+    },
+    "document_pbModifyIPRequest": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string"
+        },
+        "continent": {
+          "$ref": "#/definitions/document_pbContinent"
+        },
+        "country": {
+          "$ref": "#/definitions/document_pbCountry"
+        },
+        "location": {
+          "$ref": "#/definitions/document_pbLocation"
+        },
+        "subdivisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/document_pbSubdivision"
+          }
+        },
+        "representedCountry": {
+          "$ref": "#/definitions/document_pbRepresentedCountry"
+        },
+        "registeredCountry": {
+          "$ref": "#/definitions/document_pbRegisteredCountry"
+        },
+        "traits": {
+          "$ref": "#/definitions/document_pbTraits"
+        },
+        "postal": {
+          "$ref": "#/definitions/document_pbPostal"
+        },
+        "city": {
+          "$ref": "#/definitions/document_pbCity"
+        }
+      }
+    },
+    "document_pbModifyIPResponse": {
+      "type": "object"
+    },
+    "document_pbPingResponse": {
+      "type": "object"
+    },
+    "document_pbPostal": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        }
+      }
+    },
+    "document_pbRegisteredCountry": {
+      "type": "object",
+      "properties": {
+        "isoCode": {
+          "type": "string"
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "isInEuropeanUnion": {
+          "type": "boolean"
+        }
+      }
+    },
+    "document_pbRepresentedCountry": {
+      "type": "object",
+      "properties": {
+        "isoCode": {
+          "type": "string"
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string"
+        },
+        "isInEuropeanUnion": {
+          "type": "boolean"
+        }
+      }
+    },
+    "document_pbSubdivision": {
+      "type": "object",
+      "properties": {
+        "isoCode": {
+          "type": "string"
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "document_pbTraits": {
+      "type": "object",
+      "properties": {
+        "isAnonymousProxy": {
+          "type": "boolean"
+        },
+        "isAnycast": {
+          "type": "boolean"
+        },
+        "isSatelliteProvider": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
