@@ -22,3 +22,6 @@ ifdef service
 else
 	@echo "service is required, make gen service=core"
 endif
+
+run:
+	cd services/$(service) && go run main.go serve 

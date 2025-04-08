@@ -411,3 +411,8 @@
 {"L":"INFO","T":"2025-04-08T03:32:32+07:00","C":"interceptors/request.go:44","M":"Response","request_id":"019611f4-3d9b-78f1-ba17-f7cb908c0dce","respone":"{}"}
 {"L":"INFO","T":"2025-04-08T03:32:32+07:00","C":"maxmind/reader.go:176","M":"Version file changed. Reloading database..."}
 {"L":"INFO","T":"2025-04-08T03:32:32+07:00","C":"maxmind/reader.go:180","M":"Database is up to date with new version","version":"history__1744057941__1.1.1.1.json"}
+{"L":"DEBUG","T":"2025-04-08T10:42:26+07:00","C":"maxmind/reader.go:133","M":"IPGeolite Reader is being initializing..."}
+{"L":"DEBUG","T":"2025-04-08T10:42:26+07:00","C":"maxmind/reader.go:141","M":"IPGeolite Reader is initialized"}
+{"L":"INFO","T":"2025-04-08T10:42:26+07:00","C":"maxmind/maxmind.go:113","M":"Maxmind geolocation provider initialized"}
+{"L":"DEBUG","T":"2025-04-08T10:42:26+07:00","C":"maxmind/writer.go:64","M":"IPGeolite Writer is being initializing...."}
+{"L":"FATAL","T":"2025-04-08T10:42:26+07:00","C":"grpc_service/grpc.go:48","M":"Failed to listen: listen tcp :9000: bind: address already in use"}
