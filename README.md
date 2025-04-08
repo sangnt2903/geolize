@@ -20,11 +20,13 @@ Geolize is a geolocation service that provides IP lookup and modification capabi
 2. Setup the environment:
     
 Make sure you have installed the Docker and Docker Compose.
+    
     ```bash
     make bootstrap
     ```
 
 3. Run the service:
+    
     ```bash
     make run service=geolize
     ```
@@ -34,6 +36,7 @@ Make sure you have installed the Docker and Docker Compose.
 1. Make changes to the protobuf files in the geolize directory `service-protos/services/geolize/service.proto`.
 
 2. Generate the Go code:
+   
     ```bash
     make gen service=geolize
     ```
@@ -46,6 +49,7 @@ Make sure you have installed the Docker and Docker Compose.
 3. Set Geolize DB to dev.ini file with the name of the new database file.
 
 For example: If database file name is `GeoLite2-City.mmdb`, then you need to update the `dev.ini` file with the following:
+    
     ```ini
     [geolize]
     db=GeoLite2-City.mmdb
