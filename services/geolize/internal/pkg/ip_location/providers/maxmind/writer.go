@@ -7,13 +7,14 @@ import (
 	"geolize/services/geolize/internal/pkg/ip_location/model"
 	jsonhelper "geolize/utilities/json_helper"
 	"geolize/utilities/logging"
-	"github.com/oschwald/geoip2-golang"
 	"log"
 	"net"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
+
+	"github.com/oschwald/geoip2-golang"
 
 	"github.com/maxmind/mmdbwriter"
 	"github.com/maxmind/mmdbwriter/mmdbtype"
@@ -144,29 +145,6 @@ func (w *Writer) loadToLatest() {
 			return
 		}
 
-		for _, overrideIP := range config.Overrides {
-			_, network, err := net.ParseCIDR(fmt.Sprintf("%s/32", overrideIP.IP))
-			if err != nil {
-				w.logger.Fatal(context.Background(), "Failed to parse ip", append(logging.NewError(err), logging.NewKeyVal("ip", overrideIP.IP))...)
-				return
-			}
-
-			err = w.writer.InsertFunc(network, func(value mmdbtype.DataType) (mmdbtype.DataType, error) {
-				v, ok := value.(mmdbtype.Map)
-				if !ok {
-					return nil, fmt.Errorf("expected Map, got %T", value)
-				}
-
-				applyOverride(v, overrideIP)
-
-				return v, nil
-			})
-			if err != nil {
-				w.logger.Fatal(context.Background(), "Failed to insert override", append(logging.NewError(err), logging.NewKeyVal("ip", overrideIP.IP))...)
-				return
-			}
-		}
-
 		output := filepath.Join(dbFolder, db)
 		err = w.override(mergeFile, output)
 		if err != nil {
@@ -208,14 +186,23 @@ func (w *Writer) override(mergedFile string, output string) error {
 		}
 
 		err = w.writer.InsertFunc(network, func(value mmdbtype.DataType) (mmdbtype.DataType, error) {
-			v, ok := value.(mmdbtype.Map)
-			if !ok {
-				return nil, fmt.Errorf("expected Map, got %T", value)
+			// Create a new map instead of modifying the existing one
+			newMap := make(mmdbtype.Map)
+
+			// If there's an existing value, copy it
+			if value != nil {
+				v, ok := value.Copy().(mmdbtype.Map)
+				if !ok {
+					return nil, fmt.Errorf("existing value is not a map")
+				}
+
+				newMap = v
 			}
 
-			applyOverride(v, override)
+			// Apply the override to our new copy
+			applyOverride(newMap, override)
 
-			return v, nil
+			return newMap, nil
 		})
 		if err != nil {
 			log.Fatalf("Error inserting override: %v", err)
